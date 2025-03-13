@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: 'Cricket Fantasy',
   description: 'Play fantasy cricket and win exciting prizes',
 };
-
+//gig
 export default function RootLayout({
   children,
 }: {

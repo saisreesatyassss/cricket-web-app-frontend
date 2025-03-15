@@ -1,21 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ArrowLeft, Users, Trophy, RefreshCw, Save } from 'lucide-react';
 import { Player } from '@/types/players';
 import {  Match } from '@/types/match';
 
-export default function EditPlayerPoints({ params }: { params: { id: string } }) {
+export default function EditPlayerPoints() {
   const router = useRouter();
   const [match, setMatch] = useState<Match | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [points, setPoints] = useState<Record<string, number>>({});
-
+const params=useParams();
   useEffect(() => {
     fetchMatchAndPlayers();
   }, [params.id]);

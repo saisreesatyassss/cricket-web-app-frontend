@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from "next/navigation";
 import axios from 'axios';
@@ -12,6 +12,7 @@ import PlayerFilters from '@/components/player-selection/PlayerFilters';
 import PlayerCard from '@/components/player-selection/PlayerCard';
 import BottomBar from '@/components/player-selection/BottomBar';
 import UserHeader from '@/components/user/header';
+import { useAuthCheck } from '@/utils/client-auth';
 
 interface SelectedPlayerDetails {
   playerId: string;
@@ -20,6 +21,7 @@ interface SelectedPlayerDetails {
 }
 
 export default function PlayerSelection() {
+  useAuthCheck();
   const router = useRouter();
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<SelectedPlayerDetails[]>([]);
@@ -64,7 +66,14 @@ export default function PlayerSelection() {
         alert('You can only select 11 players');
         return prev;
       }
-      return [...prev, { playerId, isCaptain: false, isViceCaptain: false }];
+      const player = players.find(p => p._id === playerId);
+      if (!player) return prev;
+      return [...prev, { 
+        playerId, 
+        name: player.name,
+        isCaptain: false, 
+        isViceCaptain: false 
+      }];
     });
   };
 
@@ -128,7 +137,7 @@ export default function PlayerSelection() {
       const authToken = Cookies.get('authToken');
       
       await axios.post(
-        'https://cricket-web-app-backend.vercel.app/api/teams/create',
+        'https://cricket-web-app-backend.vercel.app/api/team/teams/create',
         {
           matchId: params.id,
           teamName,
@@ -141,7 +150,7 @@ export default function PlayerSelection() {
         }
       );
       alert('Team created successfully!');
-      router.push('/my-teams');
+      router.push('/matches');
     } catch (err) {
       alert('Failed to create team. Please try again.');
     } finally {

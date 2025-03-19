@@ -33,7 +33,7 @@ export default function AuthPage() {
                   {isLogin ? 'Welcome back' : 'Create account'}
                 </h2>
               </div>
-              {isLogin ? <LoginForm /> : <SignupForm />}
+              {isLogin ? <LoginForm/> : <SignupForm />}
               <div className="text-sm text-muted-foreground text-center">
                 {isLogin ? "Don't have an account? " : 'Already have an account? '}
                 <button

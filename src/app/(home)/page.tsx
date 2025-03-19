@@ -1,7 +1,10 @@
+import { useAuthCheck } from "@/utils/client-auth";
+import { checkAuth } from "@/utils/server-auth";
 import Link from "next/link";
 import React from "react";
 
 const WelcomeComponent = () => {
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white text-center p-6">
       <h1 className="text-4xl font-bold mb-4">Welcome to Our Website</h1>

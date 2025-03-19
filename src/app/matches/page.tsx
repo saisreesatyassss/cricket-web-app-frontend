@@ -7,8 +7,10 @@ import { Match } from '@/types/match';
 import MatchCard from '@/components/matches/MatchCard';
 import UserHeader from '@/components/user/header';
 import UserFooter from '@/components/user/footer';
+import { useAuthCheck } from '@/utils/client-auth';
 
 function App() {
+  useAuthCheck();
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -17,8 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    
         <div className="min-h-screen flex flex-col">
           <UserHeader />
           <main className="flex-grow pt-16">
@@ -26,7 +25,6 @@ export default function RootLayout({
           </main>
           <UserFooter />
         </div>
-      </body>
-    </html>
+     
   );
 }

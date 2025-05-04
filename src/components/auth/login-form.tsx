@@ -36,7 +36,7 @@ export function LoginForm() {
 
       // Store the token in cookies
       Cookies.set('authToken', data.token, {
-        expires: 7, // Token expires in 7 days
+        expires: 7, // Token expires in 7 days 
         secure: true, // Only send over HTTPS
         sameSite: 'strict' // Protect against CSRF
       });

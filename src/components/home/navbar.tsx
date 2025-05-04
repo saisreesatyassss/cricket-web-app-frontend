@@ -58,7 +58,7 @@ export function Navmenu() {
           <Button
             asChild
             className="text-white hidden sm:flex bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300"
-          >
+          >  
             <Link href="/signup">Sign Up</Link>
           </Button>
           <MobileMenu />

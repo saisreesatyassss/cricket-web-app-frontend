@@ -47,7 +47,7 @@ export function SignupForm() {
       if (data.user.role === "admin") {
         router.push("/admin");
       } else {
-        router.push("/profile");
+        router.push("/payment");
       }
     } catch (err) {
       console.error('Registration error:', err);

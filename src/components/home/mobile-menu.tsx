@@ -14,10 +14,10 @@ export function MobileMenu() {
     { href: "/#features", label: "Features" },
     { href: "/#how-it-works", label: "How It Works" },
     { href: "/#live-matches", label: "Live Matches", comingSoon: true },
-    { href: "/#analytics", label: "Analytics", comingSoon: true },
-    { href: "/#discussion-board", label: "Discussion Board", comingSoon: true },
-    {href: "/#", label:"India's first online multi player cricket game", comingSoon: true},
-    { href: "/#ai-team-maker", label: "AI Team Maker", comingSoon: true },
+    // { href: "/#analytics", label: "Analytics", comingSoon: true },
+    // { href: "/#discussion-board", label: "Discussion Board", comingSoon: true },
+    // {href: "/#", label:"India's first online multi player cricket game", comingSoon: true},
+    // { href: "/#ai-team-maker", label: "AI Team Maker", comingSoon: true },
     { href: "/#faq", label: "FAQ" },
   ]
   return (

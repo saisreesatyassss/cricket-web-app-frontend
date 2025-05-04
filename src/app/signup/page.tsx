@@ -19,7 +19,6 @@ export default function AuthPage() {
               Enter your details to get started. It's quick and easy!
             </p>
           </div>
-
           <SignupForm />
         </div>
       </main>

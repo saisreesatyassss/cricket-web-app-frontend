@@ -2,7 +2,10 @@
 
 import { LockKeyhole } from 'lucide-react';
 import { LoginForm } from '@/components/auth/login-form';
+import { Footer } from "@/components/home/footer";
+import { Navmenu } from "@/components/home/navbar";
 
+ 
 export default function AuthPage() {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-blue-50 via-white to-orange-50 py-10">

@@ -105,7 +105,7 @@ export function HeroSection() {
                   href="#early-access"
                   className="text-white inline-flex items-center gap-2"
                 >
-                  Get Early Access{" "}
+                  Login Today{" "}
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>

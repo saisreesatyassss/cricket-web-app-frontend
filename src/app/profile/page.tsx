@@ -646,7 +646,6 @@
 import { useEffect, useState } from 'react';
 import { Edit3, Wallet } from 'lucide-react';
 import Image from 'next/image';
-// import Cookies from "js-cookie"
 import Cookies from 'js-cookie';
 type ProfileData = {
   firstName: string;
@@ -673,9 +672,14 @@ export default function ProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const authToken = typeof window !== 'undefined' ? Cookies.get("authToken") : null;
 
   useEffect(() => {
+      const authToken = Cookies.get("authToken");
+      if (!authToken) {
+        setError('Authentication token not found. Please log in again.');
+        setIsLoading(false);
+        return;
+      }
     const fetchProfile = async () => {
       try {
         const res = await fetch('https://cricket-web-app-backend.vercel.app/api/user/profile', {
@@ -708,7 +712,7 @@ export default function ProfilePage() {
     if (authToken) {
       fetchProfile();
     }
-  }, [authToken]);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     if (!formData) return;
@@ -716,6 +720,12 @@ export default function ProfilePage() {
   };
 
   const handleUpdate = async () => {
+    const authToken = Cookies.get("authToken");
+    if (!authToken) {
+        setError('Authentication token not found. Please log in again.');
+        setIsLoading(false);
+        return;
+    }
     if (!formData) return;
 
     setIsSubmitting(true);

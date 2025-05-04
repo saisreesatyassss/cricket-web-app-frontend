@@ -35,12 +35,6 @@ export function Navmenu() {
           >
             How It Works
           </Link>
-          {/* <Link
-              href="/#live-matches"
-              className="text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:bg-blue-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-            >
-              Live Matches
-            </Link> */}
           <Link
             href="/#ai-team-maker"
             className="text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:bg-blue-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
@@ -59,7 +53,13 @@ export function Navmenu() {
             asChild
             className="text-white hidden sm:flex bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300"
           >
-            <Link href="/early-access">Get Early Access</Link>
+            <Link href="/login">Login</Link>
+          </Button>
+          <Button
+            asChild
+            className="text-white hidden sm:flex bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300"
+          >
+            <Link href="/signup">Sign Up</Link>
           </Button>
           <MobileMenu />
         </div>

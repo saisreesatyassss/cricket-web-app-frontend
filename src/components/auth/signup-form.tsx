@@ -1,10 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { FormEvent, useState } from 'react';
 import { User, Mail, Lock, Phone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useState } from 'react';
 import Cookies from 'js-cookie';
+
 export function SignupForm() {
   const [formData, setFormData] = useState({
     username: '',
@@ -12,19 +12,15 @@ export function SignupForm() {
     password: '',
     phoneNumber: '',
   });
-const router=useRouter()
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const inputVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 },
-  };
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [agreed, setAgreed] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError('');
+    setIsSubmitting(true);
+    setErrorMessage('');
 
     try {
       const response = await fetch('https://cricket-web-app-backend.vercel.app/api/auth/register', {
@@ -47,145 +43,176 @@ const router=useRouter()
         sameSite: 'strict' // Protect against CSRF
       });
       Cookies.set('role', data.user.role);
-      if(data.user.role==="admin"){
-        router.push("/admin")
-      }else{
-        router.push("/profile")
+      
+      if (data.user.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/profile");
       }
-      // router.push("/matches")
-      console.log('Login successful:', data);
-      // You can add success handling here (e.g., redirect, show success message)
     } catch (err) {
       console.error('Registration error:', err);
-      setError(err instanceof Error ? err.message : 'Registration failed');
+      setErrorMessage(err instanceof Error ? err.message : 'Registration failed');
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
-      <motion.div
-        variants={inputVariants}
-        transition={{ duration: 0.3 }}
-        className="space-y-2"
-      >
-        <label htmlFor="username" className="block text-sm font-medium">
-          Username
-        </label>
-        <div className="relative">
-          <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+      <div className="space-y-5">
+        <div>
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-700 mb-1.5"
+          >
+            Username
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <User className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              placeholder="e.g., CricketFan123"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              className="appearance-none relative block w-full pl-10 px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700 mb-1.5"
+          >
+            Email
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Mail className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="yourname@example.com"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="appearance-none relative block w-full pl-10 px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="phoneNumber"
+            className="block text-sm font-medium text-gray-700 mb-1.5"
+          >
+            Phone Number
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Phone className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              id="phoneNumber"
+              name="phoneNumber"
+              type="tel"
+              required
+              placeholder="10-digit mobile number"
+              pattern="[0-9]{10}"
+              title="Please enter a valid 10-digit phone number"
+              value={formData.phoneNumber}
+              onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+              className="appearance-none relative block w-full pl-10 px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700 mb-1.5"
+          >
+            Password
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Lock className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              placeholder="Create a strong password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              className="appearance-none relative block w-full pl-10 px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-start">
+        <div className="flex items-center h-5">
           <input
-            id="username"
-            type="text"
-            placeholder="Enter your username"
-            className="w-full px-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            value={formData.username}
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+            id="terms"
+            name="terms"
+            type="checkbox"
+            checked={agreed}
+            onChange={() => setAgreed(!agreed)}
+            required
+            className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded transition duration-150 ease-in-out"
           />
         </div>
-      </motion.div>
-
-      <motion.div
-        variants={inputVariants}
-        transition={{ duration: 0.3, delay: 0.1 }}
-        className="space-y-2"
-      >
-        <label htmlFor="email" className="block text-sm font-medium">
-          Email
-        </label>
-        <div className="relative">
-          <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-          <input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            className="w-full px-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          />
+        <div className="ml-3 text-sm">
+          <label htmlFor="terms" className="font-medium text-gray-700">
+            I agree to the{" "}
+            <a
+              href="/terms"
+              className="text-blue-600 hover:text-blue-800 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Terms and Conditions
+            </a>{" "}
+            & confirm I am 18+ years of age.
+          </label>
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        variants={inputVariants}
-        transition={{ duration: 0.3, delay: 0.2 }}
-        className="space-y-2"
-      >
-        <label htmlFor="phoneNumber" className="block text-sm font-medium">
-          Phone Number
-        </label>
-        <div className="relative">
-          <Phone className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-          <input
-            id="phoneNumber"
-            type="tel"
-            placeholder="Enter your phone number"
-            className="w-full px-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            value={formData.phoneNumber}
-            onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-          />
+      {errorMessage && (
+        <div className="w-full px-4 py-3 rounded-md bg-red-50 border border-red-200">
+          <p className="text-red-700 text-sm text-center">{errorMessage}</p>
         </div>
-      </motion.div>
-
-      <motion.div
-        variants={inputVariants}
-        transition={{ duration: 0.3, delay: 0.3 }}
-        className="space-y-2"
-      >
-        <label htmlFor="password" className="block text-sm font-medium">
-          Password
-        </label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
-          <input
-            id="password"
-            type="password"
-            placeholder="Create a password"
-            className="w-full px-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          />
-        </div>
-      </motion.div>
-
-      {error && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-red-500 text-sm text-center"
-        >
-          {error}
-        </motion.div>
       )}
 
-      <motion.div
-        variants={inputVariants}
-        transition={{ duration: 0.3, delay: 0.4 }}
-      >
+      <div>
         <button
           type="submit"
-          disabled={isLoading}
-          className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={isSubmitting || !agreed}
+          className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 ease-in-out shadow-sm"
         >
-          {isLoading ? 'Creating Account...' : 'Create Account'}
+          {isSubmitting ? 'Creating Account...' : 'Create Account'}
         </button>
-      </motion.div>
+      </div>
 
-      <motion.p
-        variants={inputVariants}
-        transition={{ duration: 0.3, delay: 0.5 }}
-        className="text-xs text-center text-muted-foreground"
-      >
-        By signing up, you agree to our{' '}
-        <a href="#" className="text-primary hover:underline">
+      <p className="text-xs text-center text-gray-500">
+        By signing up, you agree to our{" "}
+        <a href="/terms" className="text-blue-600 hover:underline">
           Terms of Service
-        </a>{' '}
-        and{' '}
-        <a href="#" className="text-primary hover:underline">
+        </a>{" "}
+        and{" "}
+        <a href="/privacy" className="text-blue-600 hover:underline">
           Privacy Policy
         </a>
-      </motion.p>
+      </p>
     </form>
   );
 }

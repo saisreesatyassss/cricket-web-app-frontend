@@ -1,7 +1,7 @@
 'use client';
 
 import { LockKeyhole } from 'lucide-react';
-import { LoginForm } from '@/components/auth/login-form';
+import { SignupForm } from '@/components/auth/signup-form';
 
 export default function AuthPage() {
   return (
@@ -12,15 +12,15 @@ export default function AuthPage() {
             <div className="flex items-center justify-center space-x-2">
               <LockKeyhole className="h-6 w-6 text-blue-600" />
               <h2 className="text-center text-3xl font-extrabold text-gray-900">
-                Welcome Back
+                Create Account
               </h2>
             </div>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Enter your details to sign in to your account
+              Enter your details to get started. It's quick and easy!
             </p>
           </div>
 
-          <LoginForm />
+          <SignupForm />
         </div>
       </main>
     </div>

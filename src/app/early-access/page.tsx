@@ -42,7 +42,7 @@ const legalGamingStates = [
   "Andaman and Nicobar Islands"
   ];
 
-export default function LoginPage() {
+export default function EarlyAccess() {
   const [agreed, setAgreed] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -302,8 +302,6 @@ const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
           )}
         </div>
       </main>
-
-      {/* <Footer /> */}
     </div>
   );
 }

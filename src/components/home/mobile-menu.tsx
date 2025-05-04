@@ -52,8 +52,20 @@ export function MobileMenu() {
               asChild
               className="w-full bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300 transform hover:translate-y-[-2px] active:translate-y-0"
             >
-              <Link href="/early-access" onClick={() => setOpen(false)} className="flex items-center justify-center gap-2">
-                Get Early Access
+              <Link href="/login" onClick={() => setOpen(false)} className="flex items-center justify-center gap-2">
+                Login
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </Link>
+            </Button>
+            <Button
+              asChild
+              className="w-full bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300 transform hover:translate-y-[-2px] active:translate-y-0"
+            >
+              <Link href="/signup" onClick={() => setOpen(false)} className="flex items-center justify-center gap-2">
+                Sign Up
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>

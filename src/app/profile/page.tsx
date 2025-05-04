@@ -514,10 +514,8 @@
 //   )
 // }
 
-
-
-
 'use client';
+
 import { useState } from 'react';
 import { Edit3, Wallet } from 'lucide-react';
 import Image from 'next/image';
@@ -538,13 +536,25 @@ type WalletData = {
   nonWithdrawable?: number;
 };
 
-type UserProfileProps = {
-  profilePage: ProfileData;
-  wallet: WalletData;
-};
-
-export default function ProfilePage({ profilePage, wallet }: UserProfileProps) {
+export default function ProfilePage() {
   const [showEdit, setShowEdit] = useState(false);
+
+  // 🧪 Dummy profile data (replace with fetch/server actions later)
+  const profilePage: ProfileData = {
+    firstName: 'Rohit',
+    lastName: 'Sharma',
+    profilePicture: '',
+    education: 'B.Tech',
+    gender: 'Male',
+    stateOfResidence: 'Maharashtra',
+    email: 'rohit@example.com',
+    dateOfBirth: '1987-04-30',
+  };
+
+  const wallet: WalletData = {
+    withdrawable: 2500,
+    nonWithdrawable: 75,
+  };
 
   const totalAmount = (wallet?.withdrawable || 0) + (wallet?.nonWithdrawable || 0);
 
@@ -613,7 +623,7 @@ export default function ProfilePage({ profilePage, wallet }: UserProfileProps) {
         </div>
       </div>
 
-      {/* Edit Modal (optional enhancement for future) */}
+      {/* Edit Modal */}
       {showEdit && (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 transition-all">
           <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg">

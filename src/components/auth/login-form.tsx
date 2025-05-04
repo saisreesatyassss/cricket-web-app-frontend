@@ -45,7 +45,7 @@ export function LoginForm() {
       if (data.user.role === "admin") {
         router.push("/admin");
       } else {
-        router.push("/matches");
+        router.push("/profile");
       }
     } catch (err) {
       console.error('Login error:', err);

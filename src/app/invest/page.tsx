@@ -1,4 +1,4 @@
-import { InvestmentOpportunity } from "@/components/investment-opportunity";
+import { InvestmentOpportunity } from "@/components/home/investment-opportunity";
 import { Metadata } from "next";
 
 // Define metadata for the page

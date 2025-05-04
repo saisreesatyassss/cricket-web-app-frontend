@@ -671,15 +671,21 @@ export default function ProfilePage() {
   const [formData, setFormData] = useState<ProfileData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
 
   useEffect(() => {
-      const authToken = Cookies.get("authToken");
-      if (!authToken) {
-        setError('Authentication token not found. Please log in again.');
-        setIsLoading(false);
-        return;
+      const token = Cookies.get("authToken");
+      if (token) {
+        setAuthToken(token);
       }
+    }, []);
+
+
+
+  useEffect(() => {
+    if (!authToken) return;
+
     const fetchProfile = async () => {
       try {
         const res = await fetch('https://cricket-web-app-backend.vercel.app/api/user/profile', {
@@ -712,7 +718,7 @@ export default function ProfilePage() {
     if (authToken) {
       fetchProfile();
     }
-  }, []);
+  }, [authToken]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     if (!formData) return;
@@ -720,12 +726,6 @@ export default function ProfilePage() {
   };
 
   const handleUpdate = async () => {
-    const authToken = Cookies.get("authToken");
-    if (!authToken) {
-        setError('Authentication token not found. Please log in again.');
-        setIsLoading(false);
-        return;
-    }
     if (!formData) return;
 
     setIsSubmitting(true);

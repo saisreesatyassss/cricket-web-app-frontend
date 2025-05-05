@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Edit3, Wallet } from 'lucide-react';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
+
 type ProfileData = {
   firstName: string;
   lastName: string;
@@ -54,7 +55,6 @@ export default function ProfilePage() {
         if (!res.ok) throw new Error('Failed to fetch profile');
 
         const data = await res.json();
-
         const profileWithDefaults = {
           ...data.profile,
           profilePicture: data.profile.profilePicture || '',
@@ -62,6 +62,7 @@ export default function ProfilePage() {
         };
 
         setProfileData(profileWithDefaults);
+        console.log(profileData);
         setFormData(profileWithDefaults);
         setWallet(data.wallet || {});
       } catch (err: any) {
@@ -173,67 +174,117 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {showEdit && formData && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg space-y-4">
-            <h3 className="text-lg font-bold">Edit Profile</h3>
-            <input
-              type="text"
-              name="firstName"
-              placeholder="First Name"
-              className="input"
-              value={formData.firstName}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Last Name"
-              className="input"
-              value={formData.lastName}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="education"
-              placeholder="Education"
-              className="input"
-              value={formData.education}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="stateOfResidence"
-              placeholder="State"
-              className="input"
-              value={formData.stateOfResidence}
-              onChange={handleChange}
-            />
-            <select name="gender" value={formData.gender} onChange={handleChange} className="input">
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-            <input
-              type="date"
-              name="dateOfBirth"
-              className="input"
-              value={formData.dateOfBirth ? formData.dateOfBirth.split('T')[0] : ''}
-              onChange={handleChange}
-            />
-            <div className="flex justify-end space-x-2">
-              <button className="text-sm text-gray-600" onClick={() => setShowEdit(false)}>Cancel</button>
-              <button
-                className="text-sm bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-                onClick={handleUpdate}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Saving...' : 'Save'}
-              </button>
-            </div>
-          </div>
+  {showEdit && formData && (
+  <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-4">
+    <div className="bg-white rounded-2xl w-full max-w-2xl p-8 shadow-xl space-y-6">
+      <div className="border-b pb-4">
+        <h2 className="text-2xl font-bold text-gray-800">Edit Profile</h2>
+        <p className="text-sm text-gray-500">Update your personal details below</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+            First Name
+          </label>
+          <input
+            type="text"
+            name="firstName"
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            value={formData.firstName}
+            onChange={handleChange}
+          />
         </div>
-      )}
+
+        <div>
+          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+            Last Name
+          </label>
+          <input
+            type="text"
+            name="lastName"
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="education" className="block text-sm font-medium text-gray-700 mb-1">
+            Education
+          </label>
+          <input
+            type="text"
+            name="education"
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            value={formData.education}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="stateOfResidence" className="block text-sm font-medium text-gray-700 mb-1">
+            State of Residence
+          </label>
+          <input
+            type="text"
+            name="stateOfResidence"
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            value={formData.stateOfResidence}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
+            Gender
+          </label>
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
+            Date of Birth
+          </label>
+          <input
+            type="date"
+            name="dateOfBirth"
+            className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            value={formData.dateOfBirth ? formData.dateOfBirth.split('T')[0] : ''}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-end pt-4 space-x-4">
+        <button
+          onClick={() => setShowEdit(false)}
+          className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleUpdate}
+          disabled={isSubmitting}
+          className="px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-md transition duration-200"
+        >
+          {isSubmitting ? 'Saving...' : 'Save Changes'}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

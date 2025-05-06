@@ -59,7 +59,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     console.log("Cookies set:", {
       authToken: !!data.token,
       role: data.user.role,
-      firstName: data.user.username 
+      username: data.user.username 
     });
     
     // Wait a moment before redirecting to ensure cookies are set

@@ -18,21 +18,6 @@ export default function PaymentPage() {
     setErrorMessage('');
     
     try {
-      // Make an API call to verify payment
-      // const response = await fetch("https://cricket-web-app-backend.vercel.app/api/payment/verify", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     "Authorization": `Bearer ${Cookies.get('authToken')}`
-      //   },
-      //   body: JSON.stringify({
-      //     paymentStatus: 'completed',
-      //   }),
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error("Payment verification failed. Please try again.");
-      // }
 
       // Redirect directly to profile completion page
       router.push("/profile");

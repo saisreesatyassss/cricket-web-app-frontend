@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import Image from 'next/image';
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -88,15 +89,13 @@ export default function PaymentPage() {
               <p className="text-sm text-gray-500 mt-1">Scan the QR code below to make payment</p>
             </div>
             
-            <div className="border-4 border-blue-100 p-3 rounded-lg bg-white">
-              {/* Using a div instead of Image component to avoid hydration issues */}
-              <div className="bg-gray-100 w-48 h-48 flex items-center justify-center mx-auto">
-                {/* Replace this with your actual QR code when available */}
-                <div className="text-center">
-                  <p className="text-sm text-gray-500">QR Code</p>
-                  <p className="text-xs text-gray-400 mt-2">UPI: example@upi</p>
-                </div>
-              </div>
+             <div className="border-4 border-blue-100 p-3 rounded-lg bg-white">
+              <Image 
+                src="/qr-code.png" 
+                alt="Payment QR Code"
+                width={200}
+                height={200}
+                className="mx-auto" />
             </div>
             
             <div className="text-center">

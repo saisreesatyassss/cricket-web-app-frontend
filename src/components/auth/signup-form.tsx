@@ -16,46 +16,68 @@ export function SignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [agreed, setAgreed] = useState(false);
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setErrorMessage('');
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrorMessage('');
+  try {
+    console.log("Submitting registration form...");
+    
+    const response = await fetch('https://cricket-web-app-backend.vercel.app/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-    try {
-      const response = await fetch('https://cricket-web-app-backend.vercel.app/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    console.log("Registration response status:", response.status);
+    const data = await response.json();
+    console.log("Registration response data:", data);
 
-      const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || 'Registration failed');
+    }
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
-      }
-
-      Cookies.set('authToken', data.token, {
-        expires: 7, // Token expires in 7 days
-        secure: true, // Only send over HTTPS
-        sameSite: 'strict' // Protect against CSRF
-      });
-      Cookies.set('role', data.user.role);
-      
+    // Store all necessary user data in cookies
+    Cookies.set('authToken', data.token, {
+      expires: 7, // Token expires in 7 days
+      sameSite: 'lax' // Use 'lax' instead of 'strict' to allow redirects to work properly
+    });
+    
+    // Store user role
+    Cookies.set('role', data.user.role || 'user');
+    
+    // Store user name for displaying on payment page
+    if (data.user.username) {
+      Cookies.set('username', data.user.username);
+    }
+ 
+    
+    console.log("User successfully registered. Role:", data.user.role);
+    console.log("Cookies set:", {
+      authToken: !!data.token,
+      role: data.user.role,
+      firstName: data.user.username 
+    });
+    
+    // Wait a moment before redirecting to ensure cookies are set
+    setTimeout(() => {
       if (data.user.role === "admin") {
         router.push("/admin");
       } else {
         router.push("/payment");
       }
-    } catch (err) {
-      console.error('Registration error:', err);
-      setErrorMessage(err instanceof Error ? err.message : 'Registration failed');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    }, 100);
+    
+  } catch (err) {
+    console.error('Registration error:', err);
+    setErrorMessage(err instanceof Error ? err.message : 'Registration failed');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

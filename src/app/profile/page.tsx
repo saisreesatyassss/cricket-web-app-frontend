@@ -87,18 +87,14 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!authToken) {
       console.log("No auth token available, skipping profile fetch");
-
           // Delete cookies
       Cookies.remove('authToken');
       Cookies.remove('role');
       Cookies.remove('userName');
       Cookies.remove('userId');
       Cookies.remove('referralId');
-
       // Optionally clear localStorage if used
       localStorage.clear();
-
-      
           setTimeout(() => {
             router.push("/login");
           }, 3000);
@@ -151,20 +147,6 @@ export default function ProfilePage() {
       } catch (err: any) {
         console.error("Error fetching profile:", err);
         setError(err.message || 'Error loading profile');
-
-         setTimeout(() => {
-            router.push("/login");
-          }, 5000);
-   
-    // Delete cookies
-      Cookies.remove('authToken');
-      Cookies.remove('role');
-      Cookies.remove('userName');
-      Cookies.remove('userId');
-      Cookies.remove('referralId');
-
-      // Optionally clear localStorage if used
-      localStorage.clear();
 
       } finally {
         setIsLoading(false);
@@ -296,7 +278,7 @@ export default function ProfilePage() {
   nonWithdrawable={wallet.nonWithdrawable ?? 0}
 />
 <ReferralSection referralId={profileData.referralId|| 'testid'} />
-
+<LogoutButton />
       {showEdit && formData && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
           <div className="bg-white rounded-2xl w-full max-w-2xl p-8 shadow-xl space-y-6 max-h-[90vh] overflow-y-auto">

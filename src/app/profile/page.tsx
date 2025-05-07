@@ -87,6 +87,18 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!authToken) {
       console.log("No auth token available, skipping profile fetch");
+
+          // Delete cookies
+      Cookies.remove('authToken');
+      Cookies.remove('role');
+      Cookies.remove('userName');
+      Cookies.remove('userId');
+      Cookies.remove('referralId');
+
+      // Optionally clear localStorage if used
+      localStorage.clear();
+
+      
           setTimeout(() => {
             router.push("/login");
           }, 3000);

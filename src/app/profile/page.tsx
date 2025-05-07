@@ -8,6 +8,7 @@ import { Edit3, Wallet } from 'lucide-react';
 import Cookies from 'js-cookie';
 import ReferralSection from "@/components/profile/ReferralSection";
 import WalletBalance from '@/components/profile/WalletBalance';
+import { useRouter } from 'next/navigation';
 
 type ProfileData = {
   firstName: string;
@@ -65,6 +66,7 @@ export default function ProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const router = useRouter();
 
   console.log("ProfilePage component mounted");
 
@@ -102,6 +104,7 @@ export default function ProfilePage() {
           const errorText = await res.text();
           console.error("API error response:", errorText);
           throw new Error(`Failed to fetch profile: ${res.status}`);
+
         }
 
         const data = await res.json();
@@ -132,6 +135,11 @@ export default function ProfilePage() {
       } catch (err: any) {
         console.error("Error fetching profile:", err);
         setError(err.message || 'Error loading profile');
+
+         setTimeout(() => {
+            router.push("/login");
+          }, 5000);
+          
       } finally {
         setIsLoading(false);
       }

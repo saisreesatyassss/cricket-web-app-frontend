@@ -3,7 +3,7 @@
 import type React from "react";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/home/theme-provider";
-import Script from "next/script";  // Replace Head with Script
+import Script from "next/script"; 
 import { Footer } from "@/components/home/footer";
 import { Navmenu } from "@/components/home/navbar";
 

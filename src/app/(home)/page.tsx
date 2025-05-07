@@ -1,19 +1,4 @@
-// import { useAuthCheck } from "@/utils/client-auth";
-// import { checkAuth } from "@/utils/server-auth";
-// import Link from "next/link";
-// import React from "react";
-
-// const WelcomeComponent = () => {
-  
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white text-center p-6">
-    
-  
-//     </div>
-//   );
-// };
-
-// export default WelcomeComponent;
+ 
 
 import { HeroSection } from "@/components/home/hero-section";
 import { Features } from "@/components/home/features";

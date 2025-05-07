@@ -96,8 +96,8 @@ export default function UserFooter() {
             <h3 className="text-sm font-semibold text-blue-700 mb-4">Quick Links</h3>
             <ul className="space-y-3 text-sm">
               <li><Link href="/" className="text-gray-600 hover:text-blue-700 transition-colors">Home</Link></li>
-              <li><Link href="/my-teams" className="text-gray-600 hover:text-blue-700 transition-colors">My Teams</Link></li>
-              <li><Link href="/leaderboard" className="text-gray-600 hover:text-blue-700 transition-colors">Leaderboard</Link></li>
+              {/* <li><Link href="/my-teams" className="text-gray-600 hover:text-blue-700 transition-colors">My Teams</Link></li> */}
+              {/* <li><Link href="/leaderboard" className="text-gray-600 hover:text-blue-700 transition-colors">Leaderboard</Link></li> */}
             </ul>
           </div>
 
@@ -106,8 +106,8 @@ export default function UserFooter() {
             <h3 className="text-sm font-semibold text-blue-700 mb-4">Support</h3>
             <ul className="space-y-3 text-sm">
               <li><Link href="/#faq" className="text-gray-600 hover:text-blue-700 transition-colors">FAQ</Link></li>
-              <li><Link href="/contact" className="text-gray-600 hover:text-blue-700 transition-colors">Contact Us</Link></li>
-              <li><Link href="/help" className="text-gray-600 hover:text-blue-700 transition-colors">Help Center</Link></li>
+              {/* <li><Link href="/contact" className="text-gray-600 hover:text-blue-700 transition-colors">Contact Us</Link></li> */}
+              {/* <li><Link href="/help" className="text-gray-600 hover:text-blue-700 transition-colors">Help Center</Link></li> */}
             </ul>
           </div>
 

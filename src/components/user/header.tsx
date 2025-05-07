@@ -216,7 +216,7 @@ export default function UserHeader() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-6 lg:gap-8">
+        {/* <nav className="hidden md:flex gap-6 lg:gap-8">
           <Link
             href="/matches"
             className="text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:bg-blue-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
@@ -235,7 +235,7 @@ export default function UserHeader() {
           >
             Leaderboard
           </Link>
-        </nav>
+        </nav> */}
 
         {/* Auth Buttons & Mobile Menu */}
         <div className="flex items-center gap-4">

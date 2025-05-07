@@ -2,24 +2,42 @@
 
 import { FormEvent, useState } from 'react';
 import { User, Mail, Lock, Phone } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
-export function SignupForm() {
+
+type SignupFormProps = {
+  referralId?: string;
+};
+
+
+export function SignupForm({ referralId }: SignupFormProps) {
+
+ 
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
+    confirmPassword: '',
     phoneNumber: '',
+    referralId: referralId || '', 
   });
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [agreed, setAgreed] = useState(false);
+
+
 const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setIsSubmitting(true);
   setErrorMessage('');
+
+ if (formData.password !== formData.confirmPassword) {
+    setErrorMessage("Passwords do not match");
+    setIsSubmitting(false);
+    return;
+  }
 
   try {
     console.log("Submitting registration form...");
@@ -179,8 +197,54 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             />
           </div>
         </div>
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium text-gray-700 mb-1.5"
+          >
+            ConfirmPassword
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Lock className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              required
+              placeholder="Re-enter your password"
+              value={formData.confirmPassword}
+             onChange={(e) =>
+        setFormData({ ...formData, confirmPassword: e.target.value })
+      }
+      className="appearance-none relative block w-full pl-10 px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+    />
+          </div>
+        </div>
       </div>
-
+        <div>
+          <label
+            htmlFor="referralId"
+            className="block text-sm font-medium text-gray-700 mb-1.5"
+          >
+          Referral Id
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Phone className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              id="referral"
+              name="referral"
+              type="text"
+              placeholder="e.g., XYZ123   (Optional)"
+              value={formData.referralId}
+              onChange={(e) => setFormData({ ...formData, referralId: e.target.value })}
+              className="appearance-none relative block w-full pl-10 px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+            />
+          </div>
+        </div>
       <div className="flex items-start">
         <div className="flex items-center h-5">
           <input

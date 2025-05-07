@@ -121,7 +121,7 @@ export default function ProfilePage() {
           stateOfResidence: data.profilePage.stateOfResidence || '',
           email: data.profilePage.email || '',
           dateOfBirth: data.profilePage.dateOfBirth || '',
-          referralId: data.profilePage.referralId || '',
+          referralId: data.referralId || '',
         };
 
         console.log("Processed profile data:", profileWithDefaults);

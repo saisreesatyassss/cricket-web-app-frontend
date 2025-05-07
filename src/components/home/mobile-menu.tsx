@@ -88,6 +88,7 @@ import Cookies from "js-cookie"
 import { Button } from "./ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { Badge } from "./ui/badge"
+import { useRouter } from "next/router"
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false)
@@ -97,7 +98,13 @@ export function MobileMenu() {
     const token = Cookies.get("authToken")
     setIsLoggedIn(!!token)
   }, [])
+  const router = useRouter();
 
+  const handleClick = () => {
+    setOpen(false);
+    router.push('/profile');
+    window.location.reload(); // Force a full page reload after navigation
+  };
   const navLinks = [
     { href: "/#features", label: "Features" },
     { href: "/#how-it-works", label: "How It Works" },
@@ -162,18 +169,17 @@ export function MobileMenu() {
                 </Button>
               </>
             ) : (
-              <Button
-                asChild
-                className="w-full bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300 transform hover:translate-y-[-2px] active:translate-y-0"
-              >
-                <Link href="/profile" onClick={() => setOpen(false)} className=" text-white flex items-center justify-center gap-2">
-                  Profile
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
-                    <circle cx="12" cy="7" r="4"></circle>
-                    <path d="M5.5 21h13a2.5 2.5 0 0 0-13-5 2.5 2.5 0 0 0 0 5z"></path>
-                  </svg>
-                </Link>
-              </Button>
+           <Button
+              onClick={handleClick}
+              className="w-full bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300 transform hover:translate-y-[-2px] active:translate-y-0 text-white flex items-center justify-center gap-2"
+            >
+              Profile
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
+                <circle cx="12" cy="7" r="4"></circle>
+                <path d="M5.5 21h13a2.5 2.5 0 0 0-13-5 2.5 2.5 0 0 0 0 5z"></path>
+              </svg>
+            </Button>
+
             )}
           </div>
         </nav>

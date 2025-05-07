@@ -76,6 +76,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Button } from "./ui/button";
 import { MobileMenu } from "./mobile-menu";
+import { useRouter } from "next/navigation";
 
 export function Navmenu() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -84,7 +85,13 @@ export function Navmenu() {
     const token = Cookies.get("authToken");
     setIsLoggedIn(!!token);
   }, []);
+  
+  const router = useRouter();
 
+  const handleClick = () => {
+    router.push('/profile');
+    window.location.reload(); // Force a full page reload after navigation
+  };
   return (
     <header className="fixed top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container max-w-8xl mx-auto flex h-16 items-center justify-between px-4 md:px-6 2xl:px-8">
@@ -148,12 +155,12 @@ export function Navmenu() {
               </Button>
             </>
           ) : (
-            <Button
-              asChild
-              className="text-white hidden sm:flex bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300"
-            >
-              <Link href="/profile">Profile</Link>
-            </Button>
+          <Button
+            onClick={handleClick}
+            className="text-white hidden sm:flex bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300"
+          >
+            Profile
+          </Button>
           )}
 
           <MobileMenu />

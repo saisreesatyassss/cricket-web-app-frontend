@@ -102,8 +102,8 @@ export function MobileMenu() {
 
   const handleClick = () => {
     setOpen(false);
-    router.push('/profile');
-    window.location.reload(); // Force a full page reload after navigation
+  window.location.href = '/profile'; // performs full reload
+ // Force a full page reload after navigation
   };
   const navLinks = [
     { href: "/#features", label: "Features" },

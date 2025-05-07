@@ -89,8 +89,7 @@ export function Navmenu() {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push('/profile');
-    window.location.reload(); // Force a full page reload after navigation
+  window.location.href = '/profile'; // performs full reload
   };
   return (
     <header className="fixed top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

@@ -58,8 +58,10 @@ const legalGamingStates = [
   "Chandigarh",
   "Andaman and Nicobar Islands"
   ];
+
+
 export default function ProfilePage() {
-  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [wallet, setWallet] = useState<WalletData>({});
   const [isLoading, setIsLoading] = useState(true);
   const [showEdit, setShowEdit] = useState(false);
@@ -71,33 +73,73 @@ export default function ProfilePage() {
 
   console.log("ProfilePage component mounted");
 
+  // First useEffect - check for auth token on mount and try multiple sources
   useEffect(() => {
-    console.log("Checking for auth token in cookies");
-    const token = Cookies.get("authToken");
-    if (token) {
-      console.log("Auth token found");
-      setAuthToken(token);
-    } else {
-      console.log("No auth token found in cookies");
-      setError("Authentication token not found. Please log in again.");
-      setIsLoading(false);
-    }
+    console.log("Checking for auth token");
+    
+    const checkAuth = () => {
+      // Try cookies first
+      let token = Cookies.get("authToken");
+      
+      // If not in cookies, try localStorage
+      if (!token) {
+        console.log("No auth token found in cookies, checking localStorage");
+        try {
+          const userData = localStorage.getItem('userData');
+          if (userData) {
+            const parsedData = JSON.parse(userData);
+            token = parsedData.authToken;
+            
+            // Restore cookie if found in localStorage
+            if (token) {
+              console.log("Restoring auth token from localStorage to cookies");
+              Cookies.set('authToken', token, { 
+                expires: 7, 
+                path: '/',
+                sameSite: 'lax' 
+              });
+            }
+          }
+        } catch (e) {
+          console.error("Error parsing localStorage data:", e);
+        }
+      }
+      
+      if (token) {
+        console.log("Auth token found");
+        setAuthToken(token);
+      } else {
+        console.log("No auth token found anywhere");
+        setError("Authentication token not found. Please log in again.");
+        setIsLoading(false);
+        
+        // Clear all auth data
+        Cookies.remove('authToken', { path: '/' });
+        Cookies.remove('role', { path: '/' });
+        Cookies.remove('username', { path: '/' });
+        Cookies.remove('userId', { path: '/' });
+        Cookies.remove('referralId', { path: '/' });
+        localStorage.removeItem('userData');
+        
+        // Redirect after delay
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+      }
+    };
+    
+    // Check immediately
+    checkAuth();
+    
+    // And check again after a short delay
+    const timeoutId = setTimeout(checkAuth, 500);
+    return () => clearTimeout(timeoutId);
   }, []);
 
+  // Second useEffect - fetch profile data once we have the token
   useEffect(() => {
     if (!authToken) {
       console.log("No auth token available, skipping profile fetch");
-          // Delete cookies
-      Cookies.remove('authToken');
-      Cookies.remove('role');
-      Cookies.remove('userName');
-      Cookies.remove('userId');
-      Cookies.remove('referralId');
-      // Optionally clear localStorage if used
-      localStorage.clear();
-          setTimeout(() => {
-            router.push("/login");
-          }, 3000);
       return;
     }
 
@@ -115,8 +157,23 @@ export default function ProfilePage() {
         if (!res.ok) {
           const errorText = await res.text();
           console.error("API error response:", errorText);
+          
+          // Handle 401/403 errors specifically - token may be invalid
+          if (res.status === 401 || res.status === 403) {
+            // Clear auth data and redirect
+            Cookies.remove('authToken', { path: '/' });
+            Cookies.remove('role', { path: '/' });
+            Cookies.remove('username', { path: '/' });
+            localStorage.removeItem('userData');
+            
+            setError("Session expired. Please log in again.");
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 2000);
+            return;
+          }
+          
           throw new Error(`Failed to fetch profile: ${res.status}`);
-
         }
 
         const data = await res.json();
@@ -144,10 +201,25 @@ export default function ProfilePage() {
         setProfileData(profileWithDefaults);
         setFormData(profileWithDefaults);
         setWallet(data.wallet || {});
+        
+        // Update localStorage with latest user info
+        try {
+          const existingData = localStorage.getItem('userData');
+          if (existingData) {
+            const parsedData = JSON.parse(existingData);
+            localStorage.setItem('userData', JSON.stringify({
+              ...parsedData,
+              username: `${profileWithDefaults.firstName} ${profileWithDefaults.lastName}`.trim(),
+              referralId: profileWithDefaults.referralId
+            }));
+          }
+        } catch (e) {
+          console.error("Error updating localStorage:", e);
+        }
+        
       } catch (err: any) {
         console.error("Error fetching profile:", err);
         setError(err.message || 'Error loading profile');
-
       } finally {
         setIsLoading(false);
       }

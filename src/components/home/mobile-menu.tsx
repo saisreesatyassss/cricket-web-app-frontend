@@ -88,7 +88,6 @@ import Cookies from "js-cookie"
 import { Button } from "./ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { Badge } from "./ui/badge"
-import { useRouter } from "next/router"
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false)
@@ -98,12 +97,10 @@ export function MobileMenu() {
     const token = Cookies.get("authToken")
     setIsLoggedIn(!!token)
   }, [])
-  const router = useRouter();
 
   const handleClick = () => {
     setOpen(false);
   window.location.href = '/profile'; // performs full reload
- // Force a full page reload after navigation
   };
   const navLinks = [
     { href: "/#features", label: "Features" },

@@ -76,7 +76,6 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Button } from "./ui/button";
 import { MobileMenu } from "./mobile-menu";
-import { useRouter } from "next/navigation";
 
 export function Navmenu() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -86,7 +85,6 @@ export function Navmenu() {
     setIsLoggedIn(!!token);
   }, []);
   
-  const router = useRouter();
 
   const handleClick = () => {
   window.location.href = '/profile'; // performs full reload

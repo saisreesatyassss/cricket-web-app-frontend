@@ -1,12 +1,24 @@
 'use client';
 
 import { LockKeyhole } from 'lucide-react';
-import { LoginForm } from '@/components/auth/login-form';
-import { Footer } from "@/components/home/footer";
-import { Navmenu } from "@/components/home/navbar";
+import { LoginForm } from '@/components/auth/login-form'; 
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
- 
+
 export default function AuthPage() {
+
+   const router = useRouter();
+
+  useEffect(() => {
+    const token = Cookies.get('authToken'); // or from localStorage if you prefer
+    if (token) {
+      router.push('/profile'); // redirect to profile if token exists
+    }
+  }, []);
+
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-blue-50 via-white to-orange-50 py-10">
       <main className="flex flex-1 items-center justify-center px-4 sm:px-6 lg:px-8">

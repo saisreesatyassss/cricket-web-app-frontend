@@ -14,46 +14,79 @@ export function LoginForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrorMessage('');
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setErrorMessage('');
 
-    try {
-      const response = await fetch('https://cricket-web-app-backend.vercel.app/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  try {
+    const response = await fetch('https://cricket-web-app-backend.vercel.app/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-
-      // Store the token in cookies
-      Cookies.set('authToken', data.token, {
-        expires: 7, // Token expires in 7 days 
-        secure: true, // Only send over HTTPS
-        sameSite: 'strict' // Protect against CSRF
-      });
-      Cookies.set('role', data.user.role);
-      
-      if (data.user.role === "admin") {
-        router.push("/admin");
-      } else {
-        router.push("/profile");
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      setErrorMessage(err instanceof Error ? err.message : 'Login failed');
-    } finally {
-      setIsSubmitting(false);
+    if (!response.ok) {
+      throw new Error(data.error || 'Login failed');
     }
-  };
+
+    // Store the token and user data in cookies with proper configuration
+    Cookies.set('authToken', data.token, {
+      expires: 7,
+      path: '/',
+      sameSite: 'lax' // Changed from 'strict' to 'lax' to allow navigation
+    });
+    
+    Cookies.set('role', data.user.role, {
+      expires: 7,
+      path: '/',
+      sameSite: 'lax'
+    });
+    
+    // Also store username if available
+    if (data.user.username) {
+      Cookies.set('username', data.user.username, {
+        expires: 7,
+        path: '/',
+        sameSite: 'lax'
+      });
+    }
+    
+    // Store user data in localStorage as a backup
+    localStorage.setItem('userData', JSON.stringify({
+      username: data.user.username,
+      role: data.user.role,
+      authToken: data.token
+    }));
+    
+    console.log("User successfully logged in. Role:", data.user.role);
+    console.log("Cookies set:", {
+      authToken: !!data.token,
+      role: data.user.role,
+      username: data.user.username 
+    });
+    
+    // Ensure cookies have time to be set
+    setTimeout(() => {
+      if (data.user.role === "admin") {
+        window.location.href = "/admin";
+      } else {
+        // Force a full page load instead of using the router
+        window.location.href = "/profile";
+      }
+    }, 300);
+    
+  } catch (err) {
+    console.error('Login error:', err);
+    setErrorMessage(err instanceof Error ? err.message : 'Login failed');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 import ReferralSection from "@/components/profile/ReferralSection";
 import WalletBalance from '@/components/profile/WalletBalance';
 import { useRouter } from 'next/navigation';
+import LogoutButton from '@/components/profile/Logout';
 
 type ProfileData = {
   firstName: string;
@@ -86,6 +87,9 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!authToken) {
       console.log("No auth token available, skipping profile fetch");
+          setTimeout(() => {
+            router.push("/login");
+          }, 3000);
       return;
     }
 
@@ -139,7 +143,17 @@ export default function ProfilePage() {
          setTimeout(() => {
             router.push("/login");
           }, 5000);
-          
+   
+    // Delete cookies
+      Cookies.remove('authToken');
+      Cookies.remove('role');
+      Cookies.remove('userName');
+      Cookies.remove('userId');
+      Cookies.remove('referralId');
+
+      // Optionally clear localStorage if used
+      localStorage.clear();
+
       } finally {
         setIsLoading(false);
       }
@@ -265,25 +279,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* <div className="mt-8 bg-white shadow rounded-lg p-6 border border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-4">
-          <Wallet className="h-5 w-5 text-green-600" /> Wallet Balance
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 bg-blue-50 rounded-lg shadow-sm">
-            <p className="text-sm text-gray-600">Withdrawable</p>
-            <p className="text-lg font-bold text-blue-700">₹{wallet.withdrawable?.toFixed(2) ?? '0.00'}</p>
-          </div>
-          <div className="p-4 bg-orange-50 rounded-lg shadow-sm">
-            <p className="text-sm text-gray-600">Bonus</p>
-            <p className="text-lg font-bold text-orange-600">₹{wallet.nonWithdrawable?.toFixed(2) ?? '0.00'}</p>
-          </div>
-          <div className="p-4 bg-green-50 rounded-lg shadow-sm">
-            <p className="text-sm text-gray-600">Total</p>
-            <p className="text-lg font-bold text-green-600">₹{totalAmount.toFixed(2)}</p>
-          </div>
-        </div>
-      </div> */}
 <WalletBalance
   withdrawable={wallet.withdrawable ?? 0}
   nonWithdrawable={wallet.nonWithdrawable ?? 0}
@@ -340,21 +335,7 @@ export default function ProfilePage() {
                   onChange={handleChange}
                 />
               </div>
-
-              {/* <div>
-                <label htmlFor="stateOfResidence" className="block text-sm font-medium text-gray-700 mb-1">
-                  State of Residence
-                </label>
-                <input
-                  type="text"
-                  id="stateOfResidence"
-                  name="stateOfResidence"
-                  className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  value={formData.stateOfResidence}
-                  onChange={handleChange}
-                />
-              </div> */}
-      <div>
+              <div>
                     <label
                       htmlFor="state"
                       className="block text-sm font-medium text-gray-700 mb-1.5"

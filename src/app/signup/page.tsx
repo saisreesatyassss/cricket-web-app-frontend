@@ -2,6 +2,20 @@
 
 import { LockKeyhole } from 'lucide-react';
 import { SignupForm } from '@/components/auth/signup-form';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
+
+
+ 
+   const router = useRouter();
+
+  useEffect(() => {
+    const token = Cookies.get('authToken'); // or from localStorage if you prefer
+    if (token) {
+      router.push('/profile'); // redirect to profile if token exists
+    }
+  }, []);
 
 export default function AuthPage() {
   return (

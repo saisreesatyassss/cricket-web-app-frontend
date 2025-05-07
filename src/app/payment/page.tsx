@@ -9,39 +9,73 @@ export default function PaymentPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState('Cricket Fan');
   const [isLoading, setIsLoading] = useState(true);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
-  // First useEffect: Check auth and get user data
+  // Check for authentication and user data
   useEffect(() => {
     console.log("Payment page mounted, checking auth...");
     
-    // Delay execution to ensure cookies are properly loaded in client
-    setTimeout(() => {
-      const token = Cookies.get('authToken');
-      const username = Cookies.get('username'); 
+    const checkAuth = () => {
+      // Try to get data from cookies first
+      let token = Cookies.get('authToken');
+      let username = Cookies.get('username');
       
-      console.log("Auth token found:", !!token);
-      console.log("User name data:", username,);
+      // If cookies don't have the data, check localStorage as fallback
+      if (!token || !username) {
+        try {
+          const userData = localStorage.getItem('userData');
+          if (userData) {
+            const parsedData = JSON.parse(userData);
+            token = token || parsedData.authToken;
+            username = username || parsedData.username;
+            
+            // Restore cookies if they were lost during navigation
+            if (parsedData.authToken && !Cookies.get('authToken')) {
+              Cookies.set('authToken', parsedData.authToken, { 
+                expires: 7, 
+                path: '/',
+                sameSite: 'lax' 
+              });
+            }
+            
+            if (parsedData.username && !Cookies.get('username')) {
+              Cookies.set('username', parsedData.username, { 
+                expires: 7, 
+                path: '/',
+                sameSite: 'lax' 
+              });
+            }
+          }
+        } catch (e) {
+          console.error("Error parsing localStorage data:", e);
+        }
+      }
       
-      if (username ) {
-        setUserName(`${username || ''}`.trim() || 'Cricket Fan');
-      } else {
-        setUserName('Cricket Fan');
+      console.log("Auth check - token:", !!token, "username:", username);
+      
+      if (username) {
+        setUserName(username);
       }
       
       if (token) {
         setAuthToken(token);
+        setIsLoading(false);
       } else {
-        console.warn("No auth token found, user might not be logged in");
-        // Consider redirecting to login if needed
-        // router.push("/login");
+        console.warn("No auth token found, redirecting to login");
+        router.push("/login");
       }
-      
-      setIsLoading(false);
-    }, 100); // Short delay to ensure client-side hydration
-  }, []);
+    };
+    
+    // First check immediately
+    checkAuth();
+    
+    // Then check again after a short delay to handle race conditions
+    const timeoutId = setTimeout(checkAuth, 500);
+    
+    return () => clearTimeout(timeoutId);
+  }, [router]);
 
   const handlePaymentComplete = async () => {
     console.log("Payment complete button clicked");
@@ -68,6 +102,7 @@ export default function PaymentPage() {
       </div>
     );
   }
+
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-blue-50 via-white to-orange-50">

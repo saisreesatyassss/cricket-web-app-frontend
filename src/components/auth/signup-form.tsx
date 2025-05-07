@@ -27,75 +27,89 @@ export function SignupForm({ referralId }: SignupFormProps) {
   const [errorMessage, setErrorMessage] = useState('');
   const [agreed, setAgreed] = useState(false);
 
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage('');
 
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  setErrorMessage('');
-
- if (formData.password !== formData.confirmPassword) {
-    setErrorMessage("Passwords do not match");
-    setIsSubmitting(false);
-    return;
-  }
-
-  try {
-    console.log("Submitting registration form...");
-    
-    const response = await fetch('https://cricket-web-app-backend.vercel.app/api/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    console.log("Registration response status:", response.status);
-    const data = await response.json();
-    console.log("Registration response data:", data);
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Registration failed');
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      setIsSubmitting(false);
+      return;
     }
 
-    // Store all necessary user data in cookies
-    Cookies.set('authToken', data.token, {
-      expires: 7, // Token expires in 7 days
-      sameSite: 'lax' // Use 'lax' instead of 'strict' to allow redirects to work properly
-    });
-    
-    // Store user role
-    Cookies.set('role', data.user.role || 'user');
-    
-    // Store user name for displaying on payment page
-    if (data.user.username) {
-      Cookies.set('username', data.user.username);
-    }
- 
-    
-    console.log("User successfully registered. Role:", data.user.role);
-    console.log("Cookies set:", {
-      authToken: !!data.token,
-      role: data.user.role,
-      username: data.user.username 
-    });
-    
-    // Wait a moment before redirecting to ensure cookies are set
-    setTimeout(() => {
-      if (data.user.role === "admin") {
-        router.push("/admin");
-      } else {
-        router.push("/payment");
+    try {
+      console.log("Submitting registration form...");
+      
+      const response = await fetch('https://cricket-web-app-backend.vercel.app/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      console.log("Registration response status:", response.status);
+      const data = await response.json();
+      console.log("Registration response data:", data);
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
       }
-    }, 100);
-    
-  } catch (err) {
-    console.error('Registration error:', err);
-    setErrorMessage(err instanceof Error ? err.message : 'Registration failed');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+
+      // Set cookies with proper configuration
+      Cookies.set('authToken', data.token, {
+        expires: 7,
+        path: '/',
+        sameSite: 'lax'
+      });
+      
+      Cookies.set('role', data.user.role || 'user', {
+        expires: 7,
+        path: '/',
+        sameSite: 'lax'
+      });
+      
+      if (data.user.username) {
+        Cookies.set('username', data.user.username, {
+          expires: 7,
+          path: '/',
+          sameSite: 'lax'
+        });
+      }
+      
+      // Store user data in localStorage as a backup
+      localStorage.setItem('userData', JSON.stringify({
+        username: data.user.username,
+        role: data.user.role,
+        authToken: data.token
+      }));
+      
+      console.log("User successfully registered. Role:", data.user.role);
+      console.log("Cookies set:", {
+        authToken: !!data.token,
+        role: data.user.role,
+        username: data.user.username 
+      });
+      
+      // Ensure the cookies have time to be set before routing
+      setTimeout(() => {
+        if (data.user.role === "admin") {
+          router.push("/admin");
+        } else {
+          // Force a full page load to ensure cookies are properly read on the payment page
+          window.location.href = "/payment";
+        }
+      }, 300); // Increased timeout for more reliability
+      
+    } catch (err) {
+      console.error('Registration error:', err);
+      setErrorMessage(err instanceof Error ? err.message : 'Registration failed');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

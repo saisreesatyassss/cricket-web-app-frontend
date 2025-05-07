@@ -66,7 +66,6 @@ export default function ProfilePage() {
   const [error, setError] = useState<string | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
-  // Debug log for component mounting
   console.log("ProfilePage component mounted");
 
   useEffect(() => {

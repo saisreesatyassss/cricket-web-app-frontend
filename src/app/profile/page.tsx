@@ -350,8 +350,10 @@ const [profileData, setProfileData] = useState<ProfileData | null>(null);
   nonWithdrawable={wallet.nonWithdrawable ?? 0}
 />
 <ReferralSection referralId={profileData.referralId|| 'testid'} />
-<LogoutButton />
-      {showEdit && formData && (
+  <div className="flex justify-end p-4">
+      <LogoutButton />
+    </div>
+          {showEdit && formData && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
           <div className="bg-white rounded-2xl w-full max-w-2xl p-8 shadow-xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div className="border-b pb-4">

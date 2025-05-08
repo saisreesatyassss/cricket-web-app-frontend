@@ -20,7 +20,7 @@ export function SignupForm({ referralId }: SignupFormProps) {
     password: '',
     confirmPassword: '',
     phoneNumber: '',
-    referralId: referralId || '', 
+    referral: referralId || '', 
   });
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -239,7 +239,7 @@ export function SignupForm({ referralId }: SignupFormProps) {
       </div>
         <div>
           <label
-            htmlFor="referralId"
+            htmlFor="referral"
             className="block text-sm font-medium text-gray-700 mb-1.5"
           >
           Referral Id
@@ -253,8 +253,8 @@ export function SignupForm({ referralId }: SignupFormProps) {
               name="referral"
               type="text"
               placeholder="e.g., XYZ123   (Optional)"
-              value={formData.referralId}
-              onChange={(e) => setFormData({ ...formData, referralId: e.target.value })}
+              value={formData.referral}
+              onChange={(e) => setFormData({ ...formData, referral: e.target.value })}
               className="appearance-none relative block w-full pl-10 px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
             />
           </div>

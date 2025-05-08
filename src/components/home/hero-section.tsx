@@ -101,13 +101,14 @@ export function HeroSection() {
                 size="lg"
                 className="bg-blue-700 hover:bg-blue-800 shadow-lg hover:shadow-blue-200 transition-all duration-300 group px-6"
               >
-                <Link
-                  href="#early-access"
-                  className="text-white inline-flex items-center gap-2"
-                >
-                  Login Today{" "}
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+              <Link
+                href="/signup"
+                className="text-white inline-flex items-center gap-2 group"
+              >
+                Sign Up Now{" "}
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+
               </Button>
               <Button
                 asChild
